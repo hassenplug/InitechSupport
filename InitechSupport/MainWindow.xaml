@@ -1,0 +1,119 @@
+﻿<Window x:Class="InitechSupport.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:InitechSupport"
+        mc:Ignorable="d"
+        Title="Initech Support" Height="350" Width="525" Closing="Window_Closing">
+    <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="CallTypeValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:tCallType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0" Name="grdRowCustomerPanel"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" >
+            <MenuItem Header="File">
+                <MenuItem Header="Add Customer" Name="mnuFileAddCustomer" Click="mnuFileAddCustomer_Click" />
+                <MenuItem Header="Add Call" >
+                    <MenuItem Header="Voicemail" Name="mnuFileAddVoice" Click="mnuFileAddVoice_Click"/>
+                    <MenuItem Header="Email" Name="mnuFileAddEmail" Click="mnuFileAddEmail_Click"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit" InputGestureText="Alt-F4" ToolTip="(never used)"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Auto Save" Name="mnuEditAutosave" IsCheckable="True" IsChecked="{Binding Autosave}"/>
+                <MenuItem Header="Show Customer Edit" Name="mnuEditShowCustomer" IsCheckable="True" IsChecked="{Binding EditCustomer}" Unchecked="mnuEditShowCustomer_Unchecked" />
+                <Separator/>
+                <MenuItem Header="Delete Customer (no check)" Name="mnuEditDeleteCustomer" Click="mnuEditDeleteCustomer_Click"/>
+                <MenuItem Header="Delete Call (no check)" Name="mnuEditDeleteCall" Click="mnuEditDeleteCall_Click"/>
+                <Separator/>
+                <MenuItem Header="Destroy Data" Name="mnuEditDestroy" Click="mnuEditDestroy_Click"/>
+            </MenuItem>
+        </Menu>
+        <ListView Grid.Row="1" Name="lvCustomers" ItemsSource="{Binding Path=CustomerList}" SelectionChanged="lvCustomers_SelectionChanged" MouseDoubleClick="lvCustomers_MouseDoubleClick"  >
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Customer" Width="150" DisplayMemberBinding="{Binding CustomerName}"/>
+                        <GridViewColumn Header="Purchase Date"  Width="150" DisplayMemberBinding="{Binding PurchaseDate, StringFormat=d}"/>
+                        <GridViewColumn Header="Address" Width="100" DisplayMemberBinding="{Binding Address}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Border Grid.Row="2" BorderThickness="1" BorderBrush="Blue">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Customer Name</Label>
+                <Label Grid.Row="1" Grid.Column="0">Address</Label>
+                <Label Grid.Row="2" Grid.Column="0">Purchase Date</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedItem.CustomerName, ElementName=lvCustomers}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.Address, ElementName=lvCustomers}"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding SelectedItem.PurchaseDate, ElementName=lvCustomers}" />
+            </Grid>
+        </Border>
+        <ListView Grid.Row="3" Name="lvCalls" ItemsSource="{Binding SelectedItem.CallList, ElementName=lvCustomers}">
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Responded"  Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=Responded}" IsThreeState="False" HorizontalAlignment="Center"  />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Call Date Time" Width="130" DisplayMemberBinding="{Binding CallDateTime}"/>
+                        <GridViewColumn Header="Source"  Width="90">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedItem="{Binding Path=Source}" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource CallTypeValues}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+
+                        </GridViewColumn>
+                        <GridViewColumn Header="Contact Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox HorizontalAlignment="Stretch" Text="{Binding ContactName}" BorderThickness="1"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock Grid.Row="3" Margin="6" IsHitTestVisible="False" Text="No Calls" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray" FontSize="48">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count, ElementName=lvCalls}" Value="0">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
+</Window>

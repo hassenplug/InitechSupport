@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCustomerListClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CustomerListClass>
+    <CustomerName>Steve Hassenplug</CustomerName>
+    <Address>My House</Address>
+    <PurchaseDate>2018-04-30T00:00:00</PurchaseDate>
+    <CallList>
+      <CallListClass>
+        <Source>email</Source>
+        <CallDateTime>2018-05-05T11:47:39.6518764-04:00</CallDateTime>
+        <ContactName>Steve</ContactName>
+        <Responded>true</Responded>
+      </CallListClass>
+      <CallListClass>
+        <Source>voicemail</Source>
+        <CallDateTime>2018-05-05T11:48:36.960802-04:00</CallDateTime>
+        <ContactName>Kids</ContactName>
+        <Responded>false</Responded>
+      </CallListClass>
+    </CallList>
+  </CustomerListClass>
+  <CustomerListClass>
+    <CustomerName>David</CustomerName>
+    <Address>Texas</Address>
+    <PurchaseDate>2017-12-04T00:00:00</PurchaseDate>
+    <CallList>
+      <CallListClass>
+        <Source>email</Source>
+        <CallDateTime>2018-05-05T11:49:32.8270627-04:00</CallDateTime>
+        <ContactName>No Contact</ContactName>
+        <Responded>true</Responded>
+      </CallListClass>
+    </CallList>
+  </CustomerListClass>
+  <CustomerListClass>
+    <CustomerName>Brand New</CustomerName>
+    <Address>123 Hometown</Address>
+    <PurchaseDate>2018-05-05T00:00:00-04:00</PurchaseDate>
+    <CallList />
+  </CustomerListClass>
+</ArrayOfCustomerListClass>
